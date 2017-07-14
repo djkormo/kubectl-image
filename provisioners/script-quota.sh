@@ -26,7 +26,7 @@ do
     rm -f "$lockfile"
     trap - INT TERM EXIT
   else
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date Lock Exists: $lockfile owned by $(cat $lockfile)"
   fi
 

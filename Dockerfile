@@ -1,14 +1,11 @@
-FROM  oberthur/docker-ubuntu:16.04
+FROM alpine:3.6
 ENV KUBECTL_VERSION=v1.7.1
 
-RUN apt-get update \
-  && apt-get -y upgrade \
-  &&  apt-get install -y bash curl vim jq parallel git ca-certificates --no-install-recommends && \
-  apt-get clean -y && \
-  rm -rf /var/lib/apt/lists/*
+RUN apk add --update --no-cache bash curl vim jq  ca-certificates  \
+      && rm -rf /var/cache/apk/*
 
-RUN curl -L https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl -o /usr/bin/kubectl
-RUN chmod +x /usr/bin/kubectl
+RUN curl -L https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl -o /usr/bin/kubectl \
+    && chmod +x /usr/bin/kubectl
 
 COPY provisioners provisioners
 RUN chmod -R +x provisioners

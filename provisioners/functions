@@ -5,7 +5,7 @@ function func_apply_on_changed_files {
   while read line
   do
     SUBSTRING=$(echo $line|  cut -d' '  -f2)
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo  "$date File $SUBSTRING has changed"
     kubectl apply -f $SUBSTRING
   done < /tmp/filelist.process.txt
@@ -29,7 +29,7 @@ function func_initialize_check_force_update {
   sleep 15
   while [ -f "/tmp/lock.force_update" ]
   do
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "Prov is running in force_update mode"
     echo "$date Lock Exists: $lockfile_force_update owned by $(cat $lockfile_force_update)"
     sleep 15
@@ -52,5 +52,5 @@ function func_initial_dir_list {
       echo "$hash  $i  " >> /tmp/dirlist.txt
     done
   done
-  echo "$(date --iso-8601=seconds) Initial list was created."
+  echo "$(date -I'seconds') Initial list was created."
 }

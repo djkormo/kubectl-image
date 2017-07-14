@@ -60,11 +60,11 @@ do
   SUBSTRING=$(echo $secline|  cut -d' '  -f2)
   secName=$(basename $SUBSTRING)
   NS=$(basename $(dirname $SUBSTRING))
-  date=$(date --iso-8601=seconds)
+  date=$(date -I'seconds')
   echo "$date configmap $secName in $NS was changed. It will be deleted"
   kubectl --namespace=$NS delete configmap $secName
   sleep 1
-  date=$(date --iso-8601=seconds)
+  date=$(date -I'seconds')
   echo "$date configmap $secName in $NS will be created"
   kubectl --namespace=$NS create configmap  $secName --from-file=$SUBSTRING
 
@@ -77,7 +77,7 @@ do
     echo ""
     echo "currently processed pod $i"
     i=$(echo "$i" | tr -d '"')
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date Deleting pod $i in namespace $NS using configmap $secName "
     kubectl --namespace=$NS delete pod    $i
     sleep 6
@@ -117,11 +117,11 @@ mv /tmp/configmaplist.new.txt  /tmp/configmaplist.txt
     NS=$(basename $(dirname $SUBSTRING))
     # echo "ns"$NS
     echo ""
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date Secret $secName in $NS was changed. It will be deleted"
     kubectl --namespace=$NS delete secret $secName
     sleep 1
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date Secret $secName in $NS will be created"
     kubectl --namespace=$NS create secret generic $secName --from-file=$SUBSTRING
 
@@ -133,7 +133,7 @@ mv /tmp/configmaplist.new.txt  /tmp/configmaplist.txt
     for i in $podlist
     do
       i=$(echo "$i" | tr -d '"')
-      date=$(date --iso-8601=seconds)
+      date=$(date -I'seconds')
       echo "$date kubectl patch on deployment $i in namespace $NS using secret $secName "
       kubectl --namespace=$NS patch deployment $i -p   "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"secretUpdate\":\"`date +'%s'`\"}}}}}"
 

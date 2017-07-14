@@ -54,11 +54,11 @@ do
       NS=$(basename $(dirname $SUBSTRING))
       # echo "ns"$NS
       echo ""
-      date=$(date --iso-8601=seconds)
+      date=$(date -I'seconds')
       echo "$date Secret $secName in $NS was changed. It will be deleted"
       kubectl --namespace=$NS delete secret $secName
       sleep 1
-      date=$(date --iso-8601=seconds)
+      date=$(date -I'seconds')
       echo "$date Secret $secName in $NS will be created"
       kubectl --namespace=$NS create secret generic $secName --from-file=$SUBSTRING
 
@@ -70,7 +70,7 @@ do
       for i in $podlist
       do
         i=$(echo "$i" | tr -d '"')
-        date=$(date --iso-8601=seconds)
+        date=$(date -I'seconds')
         echo "$date kubectl patch on deployment $i in namespace $NS using secret $secName "
         kubectl --namespace=$NS patch deployment $i -p   "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"secretUpdate\":\"`date +'%s'`\"}}}}}"
 
@@ -86,7 +86,7 @@ do
     rm -f "$lockfile"
     trap - INT TERM EXIT
   else
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date Lock Exists: $lockfile owned by $(cat $lockfile)"
   fi
 

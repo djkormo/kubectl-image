@@ -34,7 +34,7 @@ do
 done
 
 #avoid deleteing pods during startup
-date=$(date --iso-8601=seconds)
+date=$(date -I'seconds')
 echo "Initial list was created at $date"
 
 ###run provisioning  process
@@ -65,11 +65,11 @@ do
     SUBSTRING=$(echo $secline|  cut -d' '  -f2)
     secName=$(basename $SUBSTRING)
     NS=$(basename $(dirname $SUBSTRING))
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date configmap $secName in $NS was changed. It will be deleted"
     kubectl --namespace=$NS delete configmap $secName
     sleep 1
-    date=$(date --iso-8601=seconds)
+    date=$(date -I'seconds')
     echo "$date configmap $secName in $NS will be created"
     kubectl --namespace=$NS create configmap  $secName --from-file=$SUBSTRING
 
@@ -82,7 +82,7 @@ do
       echo ""
       echo "currently processed pod $i"
       i=$(echo "$i" | tr -d '"')
-      date=$(date --iso-8601=seconds)
+      date=$(date -I'seconds')
       echo "$date Deleting pod $i in namespace $NS using configmap $secName "
       kubectl --namespace=$NS delete pod    $i
       sleep 6
